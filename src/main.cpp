@@ -4,12 +4,19 @@
 
 #include "../lib/api/RecordingController.h"
 #include "../lib/services/RecordingService.h"
+#include "../lib/schedulers/LeanScheduler.h"
+#include "../lib/orchestrators/LeanOrchestrator.h"
+#include "../lib/db/LeanStatsRepo.h"
 
 const char* AP_SSID = "MotorcycleLeanSensor";
 const char* AP_PASSWORD = "lean12345";
 
 WebServer server(80);
-RecordingService recordingService;
+LeanStatsRepo leanStatsRepo;
+LeanOrchestrator leanOrchestrator(leanStatsRepo);
+LeanScheduler leanScheduler(leanOrchestrator);
+RecordingService recordingService(leanScheduler, leanStatsRepo);
+
 RecordingController recordingController(server, recordingService);
 
 void setup() {
@@ -38,5 +45,6 @@ void setup() {
 }
 
 void loop() {
+  leanScheduler.loop();
   server.handleClient();
 }

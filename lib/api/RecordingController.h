@@ -36,5 +36,5 @@ private:
 
 
     /// Handles GET /recording/lean-stats/latest
-    void getLatestLeanStats();
+    void getLatestLeanStats(bool testOnly);
 };

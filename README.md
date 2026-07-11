@@ -3,9 +3,24 @@
 
 ## Hardware
 - ESP32-C3
-- 3 axis sensor
+- 3 axis sensor (MPU6050)
+- VS code
+- PlatformIO
 
-### GET /recording/lean-stats/latest
+## How to use
+- clone repo
+- install VS code
+- Add PlatformIO extension
+- Plugin ESP32-C3
+- TBC plugin MPU6050 sensor
+- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
+- On Client (phone/laptop) connect to new WIFI network
+`MotorcycleLeanSensor`
+`lean12345`
+- hit urls based on reasdme
+
+
+### GET /test-only/recording/lean-stats/latest
 
 Returns the latest recorded lean statistics.
 
@@ -19,17 +34,13 @@ Example response:
   }
 ]
 ```
+
 ## State of play
--Currently hopefully does something with WIFI
-- Currently hosts a basic REST GET API returning dummy data
-- Hosts wifi network
-- Returns dummy data on fixed URL
-
-## TODO
-
-- New endpoint to maybe POKE sensor to get current stat, maybe class as test only?/ ping ping
-- Implement start and stop recording functionality (scheduler every x seconds? or do we just record every time movement is > 0?)
-- look into if int is enough for angle?
-- look into memory usage, are we going to have to store a small amount? / for only 5 mins? overwrite. how does it work??
-
-
+- WIFI hard coded to run on specific IP ADDRESS
+`http://192.168.4.1/`
+- test only route added and production route added
+- orchestrator added
+- scheduler added
+- scheudler added to main.cpp
+- fake DB added (will be in memory
+)

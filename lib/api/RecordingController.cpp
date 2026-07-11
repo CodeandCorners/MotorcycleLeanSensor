@@ -10,9 +10,22 @@ RecordingController::RecordingController(
 {
 }
 
-void RecordingController::getLatestLeanStats()
+void RecordingController::getLatestLeanStats(bool testOnly)
 {
-    const std::vector<LeanStat> stats = recordingService.getLeanStats();
+    std::vector<LeanStat> stats;
+
+    if (testOnly)
+    {
+        stats = std::vector<LeanStat>{
+            { "dummyDate1", 0 },
+            { "dummy", 10 }
+        };
+    }
+    else
+    {
+        stats = recordingService.getLeanStats();
+    }
+
     StaticJsonDocument<512> doc;
     JsonArray array = doc.to<JsonArray>();
 
@@ -37,7 +50,16 @@ void RecordingController::registerRoutes()
         HTTP_GET,
         [this]()
         {
-            getLatestLeanStats();
+            getLatestLeanStats(false);
+        });
+
+            // Test-Only Dummy Data.
+    server.on(
+        "/test-only/recording/lean-stats/latest",
+        HTTP_GET,
+        [this]()
+        {
+            getLatestLeanStats(true);
         });
 }
 
