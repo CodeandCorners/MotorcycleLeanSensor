@@ -6,7 +6,7 @@
 #include <MadgwickAHRS.h>
 
 #include "../lib/api/RecordingController.h"
-#include "../lib/services/RecordingService.h"
+#include "../lib/services/LeanService.h"
 #include "../lib/schedulers/LeanScheduler.h"
 #include "../lib/orchestrators/LeanOrchestrator.h"
 #include "../lib/db/LeanStatsRepo.h"
@@ -23,10 +23,12 @@ Adafruit_MPU6050 mpu;
 Madgwick filter;
 MPU6050Reader mpuReader(mpu, filter);
 LeanOrchestrator leanOrchestrator(leanStatsRepo, mpuReader);
-LeanScheduler leanScheduler(leanOrchestrator);
-RecordingService recordingService(leanScheduler, leanStatsRepo);
+// lean scheduler is disabled by default, it will be enabled when the user starts recording
+const bool defaultEnabled = false;
+LeanScheduler leanScheduler(leanOrchestrator, defaultEnabled);
+LeanService leanService(leanStatsRepo);
 
-RecordingController recordingController(server, recordingService, leanScheduler);
+RecordingController recordingController(server, leanService, leanScheduler);
 
 void setup() {
   Serial.begin(115200);
@@ -61,6 +63,8 @@ void setup() {
 }
 
 void loop() {
-  leanScheduler.loop();
+  // Adjust this value as needed
+  unsigned long delayBetweenRunsMs = 1000;
+  leanScheduler.loop(delayBetweenRunsMs);
   server.handleClient();
 }

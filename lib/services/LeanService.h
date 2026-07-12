@@ -7,17 +7,13 @@
 class LeanScheduler;
 class LeanStatsRepo;
 
-class RecordingService
+class LeanService
 {
 public:
-    RecordingService(LeanScheduler& scheduler, LeanStatsRepo& stats);
+    LeanService(LeanStatsRepo& leanStatsRepo);
 
     std::vector<LeanStat> getLeanStats();
 
-    void startRecording();
-    void stopRecording();
-
 private:
-    LeanScheduler& leanScheduler;
     LeanStatsRepo& leanStatsRepo;
 };

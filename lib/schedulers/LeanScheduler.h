@@ -5,14 +5,15 @@ class LeanOrchestrator;
 class LeanScheduler
 {
 public:
-    explicit LeanScheduler(LeanOrchestrator& orchestrator);
+    explicit LeanScheduler(LeanOrchestrator& orchestrator, bool defaultEnabled)
+        : orchestrator(orchestrator), enabled(defaultEnabled) {};
 
-    bool startScheduler();
-    bool stopScheduler();
-    void loop();
+    void startScheduler();
+    void stopScheduler();
+    void loop(unsigned long delayBetweenRunsMs);
     bool isSchedulerRunning();
 
 private:
     LeanOrchestrator& orchestrator;
-    bool enabled = false;
+    bool enabled;
 };

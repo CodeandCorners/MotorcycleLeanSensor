@@ -5,7 +5,11 @@ LeanOrchestrator::LeanOrchestrator(LeanStatsRepo& leanStatsRepo, MPU6050Reader& 
     : leanStatsRepo(leanStatsRepo), mpuReader(mpuReader)
 {
 }
-
+void LeanOrchestrator::reset()
+{
+    leanStatsRepo.reset();
+    Serial.println("LeanOrchestrator reset() stats in repo");
+}
 void LeanOrchestrator::run()
 {
     mpuReader.readAndUpdateFilter();

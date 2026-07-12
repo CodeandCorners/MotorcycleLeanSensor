@@ -12,17 +12,31 @@
 - install VS code
 - Add PlatformIO extension
 - Plugin ESP32-C3
-- TBC plugin MPU6050 sensor
+- plugin MPU6050 sensor
 - Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
-- hit urls based on reasdme
+- hit urls based on readme
 
 
-### GET /test-only/recording/lean-stats/latest
+### GET /recording/scheduler/start
 
-Returns the latest recorded lean statistics.
+Starts the lean scheduler if it is not already running.
+
+- If the scheduler is already running, the endpoint returns `400` with the message `Scheduler is already running`.
+
+### GET /recording/scheduler/stop
+
+Stops the lean scheduler if it is currently running.
+
+- If the scheduler is already stopped, the endpoint returns `400` with the message `Scheduler is not running`.
+
+
+
+### GET /recording/lean-stats/latest
+
+Returns the latest recorded lean statistics from the recording service.
 
 Example response:
 
@@ -35,12 +49,34 @@ Example response:
 ]
 ```
 
-## State of play
+### GET /test-only/recording/lean-stats/latest
+
+Returns dummy lean statistics for testing purposes.
+
+Example response:
+
+```
+[
+  {
+    "capturedAt": "dummyDate1",
+    "leanAngle": 0
+  },
+  {
+    "capturedAt": "dummyDate2",
+    "leanAngle": 10
+  },
+  {
+    "capturedAt": "dummyDate3",
+    "leanAngle": -10
+  }
+]
+```
+
+## Whats built
 - WIFI hard coded to run on specific IP ADDRESS
 `http://192.168.4.1/`
-- test only route added and production route added
-- orchestrator added
-- scheduler added
-- scheudler added to main.cpp
-- fake DB added (will be in memory
-)
+- test only route added to test connectivity and format of response
+- routes added to start and stop RIDE
+- Sheduler added
+- scheduler disabled by default see comments in main.cpp
+- Delay of scheduler set within main.cpp in loop method

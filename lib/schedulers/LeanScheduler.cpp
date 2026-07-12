@@ -2,24 +2,19 @@
 #include "../orchestrators/LeanOrchestrator.h"
 #include <Arduino.h>
 
-LeanScheduler::LeanScheduler(LeanOrchestrator& orchestrator)
-    : orchestrator(orchestrator)
+void LeanScheduler::startScheduler()
 {
-}
-
-bool LeanScheduler::startScheduler()
-{
+    // Delete previous ride data
+    orchestrator.reset();
     enabled = true;
-    return true;
 }
 
-bool LeanScheduler::stopScheduler()
+void LeanScheduler::stopScheduler()
 {
     enabled = false;
-    return true;
 }
 
-void LeanScheduler::loop()
+void LeanScheduler::loop(unsigned long delayBetweenRunsMs)
 {
     if (!enabled)
     {
@@ -27,7 +22,7 @@ void LeanScheduler::loop()
     }
 
     orchestrator.run();
-    delay(1000);
+    delay(delayBetweenRunsMs);
 }
 
 bool LeanScheduler::isSchedulerRunning()
