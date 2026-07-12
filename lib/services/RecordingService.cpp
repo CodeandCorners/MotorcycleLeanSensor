@@ -8,9 +8,9 @@ RecordingService::RecordingService(LeanScheduler& scheduler, LeanStatsRepo& stat
 std::vector<LeanStat>
 RecordingService::getLeanStats()
 {
-    // return leanStats;
        return std::vector<LeanStat>{
-        { "dummyDate1", 0 },
-        { "dummy", 10 }
+        { "dummyDate1", 0.0f },
+        { "dummyDate2", 10.0f },
+        { "dummyDate3", -10.0f }
     };
 }

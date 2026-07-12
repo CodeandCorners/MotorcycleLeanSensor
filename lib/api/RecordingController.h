@@ -3,6 +3,7 @@
 #include <WebServer.h>
 
 class RecordingService;
+class LeanScheduler;
 
 
 class RecordingController
@@ -17,7 +18,8 @@ public:
      */
     RecordingController(
         WebServer& server,
-        RecordingService& recordingService);
+        RecordingService& recordingService,
+        LeanScheduler& leanScheduler);
 
     /**
      * @brief Registers all recording-related routes with the web server.
@@ -33,6 +35,8 @@ private:
 
     /// Business logic for recording.
     RecordingService& recordingService;
+
+    LeanScheduler& leanScheduler;
 
 
     /// Handles GET /recording/lean-stats/latest

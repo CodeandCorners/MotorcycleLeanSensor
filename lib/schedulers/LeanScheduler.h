@@ -14,5 +14,5 @@ public:
 
 private:
     LeanOrchestrator& orchestrator;
-    bool enabled = false;
+    bool enabled = true;
 };

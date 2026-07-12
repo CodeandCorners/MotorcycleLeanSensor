@@ -7,5 +7,5 @@ struct LeanStat
 {
     String capturedAt;
 
-    int leanAngle;
+    float leanAngle;
 };
