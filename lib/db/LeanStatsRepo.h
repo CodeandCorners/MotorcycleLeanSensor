@@ -3,16 +3,13 @@
 #include <vector>
 #include "../models/LeanStat.h"
 
-
-
-class RecordingService
+class LeanStatsRepo
 {
 public:
-
-    std::vector<LeanStat> getLeanStats();
-
+    void update(const LeanStat& newStat);
+    void reset();
+    std::vector<LeanStat> get();
 
 private:
-
     std::vector<LeanStat> leanStats;
 };

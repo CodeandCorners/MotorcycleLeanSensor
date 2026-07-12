@@ -3,11 +3,40 @@
 
 ## Hardware
 - ESP32-C3
-- 3 axis sensor
+- 3 axis sensor (MPU6050)
+- VS code
+- PlatformIO
+
+## How to use
+- clone repo
+- install VS code
+- Add PlatformIO extension
+- Plugin ESP32-C3
+- plugin MPU6050 sensor
+- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
+- On Client (phone/laptop) connect to new WIFI network
+`MotorcycleLeanSensor`
+`lean12345`
+- hit urls based on readme
+
+
+### GET /recording/scheduler/start
+
+Starts the lean scheduler if it is not already running.
+
+- If the scheduler is already running, the endpoint returns `400` with the message `Scheduler is already running`.
+
+### GET /recording/scheduler/stop
+
+Stops the lean scheduler if it is currently running.
+
+- If the scheduler is already stopped, the endpoint returns `400` with the message `Scheduler is not running`.
+
+
 
 ### GET /recording/lean-stats/latest
 
-Returns the latest recorded lean statistics.
+Returns the latest recorded lean statistics from the recording service.
 
 Example response:
 
@@ -19,17 +48,35 @@ Example response:
   }
 ]
 ```
-## State of play
--Currently hopefully does something with WIFI
-- Currently hosts a basic REST GET API returning dummy data
-- Hosts wifi network
-- Returns dummy data on fixed URL
 
-## TODO
+### GET /test-only/recording/lean-stats/latest
 
-- New endpoint to maybe POKE sensor to get current stat, maybe class as test only?/ ping ping
-- Implement start and stop recording functionality (scheduler every x seconds? or do we just record every time movement is > 0?)
-- look into if int is enough for angle?
-- look into memory usage, are we going to have to store a small amount? / for only 5 mins? overwrite. how does it work??
+Returns dummy lean statistics for testing purposes.
 
+Example response:
 
+```
+[
+  {
+    "capturedAt": "dummyDate1",
+    "leanAngle": 0
+  },
+  {
+    "capturedAt": "dummyDate2",
+    "leanAngle": 10
+  },
+  {
+    "capturedAt": "dummyDate3",
+    "leanAngle": -10
+  }
+]
+```
+
+## Whats built
+- WIFI hard coded to run on specific IP ADDRESS
+`http://192.168.4.1/`
+- test only route added to test connectivity and format of response
+- routes added to start and stop RIDE
+- Sheduler added
+- scheduler disabled by default see comments in main.cpp
+- Delay of scheduler set within main.cpp in loop method

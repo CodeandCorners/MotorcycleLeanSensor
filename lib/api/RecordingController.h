@@ -2,7 +2,8 @@
 
 #include <WebServer.h>
 
-class RecordingService;
+class LeanService;
+class LeanScheduler;
 
 
 class RecordingController
@@ -13,11 +14,13 @@ public:
      * @brief Create a new RecordingController.
      *
      * @param server HTTP server that hosts the REST API.
-     * @param recordingService Business logic for recording.
+     * @param leanService returns lean stats from the repo
+     * @param leanScheduler scheduler that controls the recording of lean stats 
      */
     RecordingController(
         WebServer& server,
-        RecordingService& recordingService);
+        LeanService& leanService,
+        LeanScheduler& leanScheduler);
 
     /**
      * @brief Registers all recording-related routes with the web server.
@@ -31,10 +34,12 @@ private:
     /// Reference to the web server hosting the API.
     WebServer& server;
 
-    /// Business logic for recording.
-    RecordingService& recordingService;
+    /// stats retriever only
+    LeanService& leanService;
+
+    LeanScheduler& leanScheduler;
 
 
-    /// Handles GET /recording/lean-stats/latest
-    void getLatestLeanStats();
+    /// Handles 2 endpoints, test only utilised to get dummy data for testing the front end without having to record real data
+    void getLatestLeanStats(bool testOnly);
 };

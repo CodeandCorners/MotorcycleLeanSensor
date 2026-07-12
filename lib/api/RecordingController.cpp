@@ -1,18 +1,35 @@
 #include "RecordingController.h"
-#include "../services/RecordingService.h"
+#include "../services/LeanService.h"
+#include "../schedulers/LeanScheduler.h"
 #include <ArduinoJson.h>
 
 RecordingController::RecordingController(
     WebServer& server,
-    RecordingService& recordingService)
+    LeanService& leanService,
+    LeanScheduler& leanScheduler)
     : server(server),
-      recordingService(recordingService)
+      leanService(leanService),
+      leanScheduler(leanScheduler) 
 {
 }
 
-void RecordingController::getLatestLeanStats()
+void RecordingController::getLatestLeanStats(bool testOnly)
 {
-    const std::vector<LeanStat> stats = recordingService.getLeanStats();
+    std::vector<LeanStat> stats;
+
+    if (testOnly)
+    {
+        stats = std::vector<LeanStat>{
+            { "dummyDate1", 0.0f },
+            { "dummyDate2", 10.1f },
+            { "dummyDate3", -10.2f }
+        };
+    }
+    else
+    {
+        stats = leanService.getLeanStats();
+    }
+
     StaticJsonDocument<512> doc;
     JsonArray array = doc.to<JsonArray>();
 
@@ -31,13 +48,50 @@ void RecordingController::getLatestLeanStats()
 void RecordingController::registerRoutes()
 {
 
+    server.on(
+        "/recording/scheduler/start",
+        HTTP_GET,
+        [this]()
+        {
+            if (leanScheduler.isSchedulerRunning())
+            {
+                server.send(400, "text/plain", "Scheduler is already running");
+                return;
+            }
+            leanScheduler.startScheduler();
+            server.send(200, "text/plain", "Ride started, deleted previous ride data, recording new lean stats now");
+        });
+            server.on(
+        "/recording/scheduler/stop",
+        HTTP_GET,
+        [this]()
+        {
+            if (!leanScheduler.isSchedulerRunning())
+            {
+                server.send(400, "text/plain", "Scheduler is not running");
+                return;
+            }
+            leanScheduler.stopScheduler();
+            server.send(200, "text/plain", "Ride stopped, recording stopped");
+        });
+
+
     // Return the current recorded stats.
     server.on(
         "/recording/lean-stats/latest",
         HTTP_GET,
         [this]()
         {
-            getLatestLeanStats();
+            getLatestLeanStats(false);
+        });
+
+            // Test-Only Dummy Data.
+    server.on(
+        "/test-only/recording/lean-stats/latest",
+        HTTP_GET,
+        [this]()
+        {
+            getLatestLeanStats(true);
         });
 }
 
