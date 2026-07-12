@@ -2,23 +2,27 @@
 # Motorcycle lean sensor app
 
 ## Hardware
-- ESP32-C3
-- 3 axis sensor (MPU6050)
-- VS code
-- PlatformIO
+- ESP32 with wifi and bluetooth
+- 6 axis sensor (MPU6050)
+
 
 ## How to use
 - clone repo
 - install VS code
 - Add PlatformIO extension
-- Plugin ESP32-C3
-- plugin MPU6050 sensor
+- Plugin ESP32
+- plugin MPU6050 sensor into ports
+ESP32                     MPU6050
+-----                     -------
+3V3   ------------------> VCC
+GND   ------------------> GND
+GPIO21 -----------------> SDA
+GPIO22 -----------------> SCL
 - Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
 - hit urls based on readme
-
 
 ### GET /recording/scheduler/start
 
@@ -80,3 +84,6 @@ Example response:
 - Sheduler added
 - scheduler disabled by default see comments in main.cpp
 - Delay of scheduler set within main.cpp in loop method
+
+## Notes
+- platformio.ini declares dev board, might need to change if variation of ESP32

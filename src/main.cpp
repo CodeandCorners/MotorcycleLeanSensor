@@ -53,7 +53,7 @@ void setup() {
   recordingController.registerRoutes();
 
   // MPU6050, 200Hz
-  Wire.begin();
+  Wire.begin(21, 22);   // SDA, SCL
   mpu.begin();
   filter.begin(200);
 
