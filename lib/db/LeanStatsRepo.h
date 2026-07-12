@@ -6,8 +6,9 @@
 class LeanStatsRepo
 {
 public:
-    void set(const std::vector<LeanStat>& stats);
-    std::vector<LeanStat> get() const;
+    void update(const LeanStat& newStat);
+    void reset();
+    std::vector<LeanStat> get();
 
 private:
     std::vector<LeanStat> leanStats;

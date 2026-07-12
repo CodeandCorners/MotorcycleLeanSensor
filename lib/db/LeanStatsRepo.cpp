@@ -1,11 +1,15 @@
 #include "LeanStatsRepo.h"
 
-void LeanStatsRepo::set(const std::vector<LeanStat>& stats)
+void LeanStatsRepo::update(const LeanStat& newStat)
 {
-    leanStats = stats;
+    leanStats.push_back(newStat);
+}
+void LeanStatsRepo::reset()
+{
+    leanStats.clear();
 }
 
-std::vector<LeanStat> LeanStatsRepo::get() const
+std::vector<LeanStat> LeanStatsRepo::get()
 {
     return leanStats;
 }

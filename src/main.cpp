@@ -22,7 +22,7 @@ LeanStatsRepo leanStatsRepo;
 Adafruit_MPU6050 mpu;
 Madgwick filter;
 MPU6050Reader mpuReader(mpu, filter);
-LeanOrchestrator leanOrchestrator(leanStatsRepo);
+LeanOrchestrator leanOrchestrator(leanStatsRepo, mpuReader);
 LeanScheduler leanScheduler(leanOrchestrator);
 RecordingService recordingService(leanScheduler, leanStatsRepo);
 
