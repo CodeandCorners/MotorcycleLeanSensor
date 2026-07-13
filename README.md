@@ -1,5 +1,14 @@
 
-# Motorcycle lean sensor app
+# ESP32 Motorcycle lean sensor tool
+
+## Flow
+1. Connect to WIFI
+2. Utilise endpoints via fixed IP address
+3. Start Scheduler
+4. Ride
+5. Stop Scheduler
+6. Fetch lean stats
+7. Export lean stats for further analysis
 
 ## Hardware
 - ESP32 with wifi and bluetooth
@@ -12,13 +21,15 @@
 - Add PlatformIO extension
 - Plugin ESP32
 - plugin MPU6050 sensor into ports
-ESP32                     MPU6050
------                     -------
-3V3   ------------------> VCC
-GND   ------------------> GND
-GPIO21 -----------------> SDA
-GPIO22 -----------------> SCL
-- Need to upload image & Build to Esp32 (2 seperate uploads) `pio run -t uploadfs -t upload -e esp32dev`
+  
+| ESP32  | MPU6050 |
+|--------|---------|
+| 3V3    | VCC     |
+| GND    | GND     |
+| GPIO21 | SDA     |
+| GPIO22 | SCL     |
+
+- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
@@ -99,4 +110,3 @@ Example response:
 
 ## Notes
 - platformio.ini declares dev board, might need to change if variation of ESP32
-- will this run out memory if left unattended, probably
