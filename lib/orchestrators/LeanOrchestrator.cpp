@@ -14,6 +14,7 @@ void LeanOrchestrator::run()
 {
     mpuReader.readAndUpdateFilter();
     LeanStat newStat = mpuReader.getLeanStat();
+    Serial.println(newStat.toString());
     leanStatsRepo.update(newStat);
     Serial.println("LeanOrchestrator run() called and completed");
 }
