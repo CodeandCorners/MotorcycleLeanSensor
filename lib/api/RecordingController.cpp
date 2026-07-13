@@ -2,6 +2,7 @@
 #include "../services/LeanService.h"
 #include "../schedulers/LeanScheduler.h"
 #include <ArduinoJson.h>
+#include <LittleFS.h>
 
 RecordingController::RecordingController(
     WebServer& server,
@@ -55,12 +56,35 @@ void RecordingController::registerRoutes()
         {
             if (leanScheduler.isSchedulerRunning())
             {
-                server.send(400, "text/plain", "Scheduler is already running");
+                server.send(200, "text/plain", "Scheduler is already running");
                 return;
             }
-            leanScheduler.startScheduler();
-            server.send(200, "text/plain", "Ride started, deleted previous ride data, recording new lean stats now");
+            if (!serveStaticFile("/views/StartRecording.html", "text/html")) {
+                // serveStaticFile already sent an error response
+                return;
+            }
         });
+
+       server.on(
+    "/recording/scheduler/start",
+    HTTP_POST,
+    [this]()
+    {
+        if (leanScheduler.isSchedulerRunning())
+        {
+            server.send(400, "text/plain", "Scheduler is already running");
+            return;
+        }
+
+        // server.arg should be validated, but too messy for POC
+        uint64_t clientEpochMS = strtoull(server.arg("epoch").c_str(), nullptr, 10);
+
+        Serial.printf("Client epoch: %llu\n", clientEpochMS);
+
+        leanScheduler.startScheduler();
+
+        server.send(200, "text/plain", "Ride started ");
+    });
             server.on(
         "/recording/scheduler/stop",
         HTTP_GET,
@@ -93,6 +117,24 @@ void RecordingController::registerRoutes()
         {
             getLatestLeanStats(true);
         });
+}
+// co pilot did this, too much error handling for poc, but its in now
+bool RecordingController::serveStaticFile(const String& path, const char* contentType)
+{
+    if (!LittleFS.exists(path)) {
+        server.send(404, "text/plain", "Not found");
+        return false;
+    }
+
+    File f = LittleFS.open(path, "r");
+    if (!f) {
+        server.send(500, "text/plain", "Failed to open file");
+        return false;
+    }
+
+    server.streamFile(f, contentType);
+    f.close();
+    return true;
 }
 
 

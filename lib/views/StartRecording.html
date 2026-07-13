@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="startRide()">Start</button>
+
+<script>
+function startRide() {
+    const params = new URLSearchParams({
+        epoch: Date.now()
+    });
+
+    fetch("/recording/scheduler/start", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    });
+}
+</script>
+
+</body>
+</html>

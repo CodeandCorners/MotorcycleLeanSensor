@@ -42,4 +42,7 @@ private:
 
     /// Handles 2 endpoints, test only utilised to get dummy data for testing the front end without having to record real data
     void getLatestLeanStats(bool testOnly);
+
+    // Serve a static file from filesystem; returns true when file served.
+    bool serveStaticFile(const String& path, const char* contentType);
 };

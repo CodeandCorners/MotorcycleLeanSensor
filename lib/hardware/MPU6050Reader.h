@@ -2,12 +2,12 @@
 #include <Adafruit_MPU6050.h>
 #include <MadgwickAHRS.h>
 #include "../models/LeanStat.h"
-
+#include "../util/DateTime.h"
 
 class MPU6050Reader
 {
 public:
-    MPU6050Reader(Adafruit_MPU6050& mpu, Madgwick& filter);
+    explicit MPU6050Reader(Adafruit_MPU6050& mpu, Madgwick& filter, DateTime& dateTime) : mpu(mpu), filter(filter), dateTime(dateTime) {};
 
     // Pull from one library, update another
     void readAndUpdateFilter();
@@ -18,12 +18,13 @@ public:
     // not used
     float getYaw();
 
-   String getCurrentDateTime();
+    // Its calling mutable, forced immutable after set DateTime helper
+    String getCurrentDateTime();
 
     LeanStat getLeanStat();
 
 private:
     Adafruit_MPU6050& mpu;
     Madgwick& filter;
-
+    DateTime& dateTime;
 };

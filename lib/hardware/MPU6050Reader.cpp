@@ -3,11 +3,9 @@
 #include <MadgwickAHRS.h>
 #include <time.h>
 #include "../models/LeanStat.h"
+#include "../util/DateTime.h"
 
 #include "MPU6050Reader.h"
-
- MPU6050Reader::MPU6050Reader(Adafruit_MPU6050& mpu, Madgwick& filter) : mpu(mpu), filter(filter) {}
-
 
     // Pull from one library, update another
     void MPU6050Reader::readAndUpdateFilter()
@@ -49,22 +47,8 @@ LeanStat MPU6050Reader::getLeanStat()
 // complicated because millis has to be calculated seperately library apparently doesn't provide milliseconds in the time struct
 String MPU6050Reader::getCurrentDateTime()
 {
-    time_t now = time(nullptr);
-    struct tm timeinfo;
-    gmtime_r(&now, &timeinfo);
-
-    unsigned long ms = millis() % 1000;
-
-    char buffer[32];
-    snprintf(buffer, sizeof(buffer),
-             "%04d-%02d-%02dT%02d:%02d:%02d.%03luZ",
-             timeinfo.tm_year + 1900,
-             timeinfo.tm_mon + 1,
-             timeinfo.tm_mday,
-             timeinfo.tm_hour,
-             timeinfo.tm_min,
-             timeinfo.tm_sec,
-             ms);
-
-    return String(buffer);
+    u_int64_t currentEpochMs = dateTime.getCurrentEpochMs();
+    String userFriendlyTime = dateTime.convertEpochMSToUserFriendlyTimeStamp(currentEpochMs);
+    return userFriendlyTime;
+  
 }
