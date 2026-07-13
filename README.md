@@ -18,17 +18,25 @@ ESP32                     MPU6050
 GND   ------------------> GND
 GPIO21 -----------------> SDA
 GPIO22 -----------------> SCL
-- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
+- Need to upload image & Build to Esp32 (2 seperate uploads) `pio run -t uploadfs -t upload -e esp32dev`
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
-- hit urls based on readme
+- hit urls based on readme (start is a good start)
 
 ### GET /recording/scheduler/start
 
-Starts the lean scheduler if it is not already running.
+Returns form && JS required to run on submit
 
 - If the scheduler is already running, the endpoint returns `400` with the message `Scheduler is already running`.
+
+200 response
+### POST /recording/scheduler/start
+
+Takes form from GET, form needs to contain EPOCH MS to setup ESP32 datetime (only once, will not override)
+
+200 response
+
 
 ### GET /recording/scheduler/stop
 
@@ -41,6 +49,7 @@ Stops the lean scheduler if it is currently running.
 ### GET /recording/lean-stats/latest
 
 Returns the latest recorded lean statistics from the recording service.
+Streamed
 
 Example response:
 
@@ -81,9 +90,13 @@ Example response:
 `http://192.168.4.1/`
 - test only route added to test connectivity and format of response
 - routes added to start and stop RIDE
+- POST route added with form to send Datetime.now() from client to setup datetime on ESP32 for the first time
 - Sheduler added
 - scheduler disabled by default see comments in main.cpp
 - Delay of scheduler set within main.cpp in loop method
+- Response of results streamed as standard Json hit limit quickly
+- Added "LittleFs" file system to store html file, needs to be uploaded seperately to esp32
 
 ## Notes
 - platformio.ini declares dev board, might need to change if variation of ESP32
+- will this run out memory if left unattended, probably

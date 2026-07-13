@@ -30,14 +30,14 @@ const bool defaultEnabled = false;
 LeanScheduler leanScheduler(leanOrchestrator, defaultEnabled);
 LeanService leanService(leanStatsRepo);
 
-RecordingController recordingController(server, leanService, leanScheduler);
+RecordingController recordingController(server, leanService, leanScheduler, dateTime);
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
 
   // Mount LittleFS so we can serve static files from /views
-  if (!LittleFS.begin()) {
+  if (!LittleFS.begin(true)) {
     Serial.println("Failed to mount LittleFS");
   } else {
     Serial.println("LittleFS mounted");

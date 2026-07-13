@@ -1,26 +1,22 @@
 #pragma once
 
 #include <WebServer.h>
-
-class LeanService;
-class LeanScheduler;
-
+#include "../services/LeanService.h"
+#include "../schedulers/LeanScheduler.h"
+#include "../util/DateTime.h"
 
 class RecordingController
 {
 public:
 
-    /**
-     * @brief Create a new RecordingController.
-     *
-     * @param server HTTP server that hosts the REST API.
-     * @param leanService returns lean stats from the repo
-     * @param leanScheduler scheduler that controls the recording of lean stats 
-     */
-    RecordingController(
+   explicit RecordingController(
         WebServer& server,
         LeanService& leanService,
-        LeanScheduler& leanScheduler);
+        LeanScheduler& leanScheduler,
+        DateTime& dateTime) : server(server),
+      leanService(leanService),
+      leanScheduler(leanScheduler),
+      dateTime(dateTime){}
 
     /**
      * @brief Registers all recording-related routes with the web server.
@@ -38,6 +34,8 @@ private:
     LeanService& leanService;
 
     LeanScheduler& leanScheduler;
+
+    DateTime& dateTime;
 
 
     /// Handles 2 endpoints, test only utilised to get dummy data for testing the front end without having to record real data

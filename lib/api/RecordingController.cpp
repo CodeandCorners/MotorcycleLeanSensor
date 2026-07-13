@@ -3,16 +3,10 @@
 #include "../schedulers/LeanScheduler.h"
 #include <ArduinoJson.h>
 #include <LittleFS.h>
+#include <WiFi.h>
+#include "../util/DateTime.h"
 
-RecordingController::RecordingController(
-    WebServer& server,
-    LeanService& leanService,
-    LeanScheduler& leanScheduler)
-    : server(server),
-      leanService(leanService),
-      leanScheduler(leanScheduler) 
-{
-}
+   
 
 void RecordingController::getLatestLeanStats(bool testOnly)
 {
@@ -31,19 +25,32 @@ void RecordingController::getLatestLeanStats(bool testOnly)
         stats = leanService.getLeanStats();
     }
 
-    StaticJsonDocument<512> doc;
-    JsonArray array = doc.to<JsonArray>();
+    // Stream JSON array directly to client using server.sendContent()
+    server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    server.sendHeader("Content-Type", "application/json");
+    server.sendHeader("Connection", "close");
+    server.send(200, "application/json", "");
+
+    server.sendContent("[");
+    bool first = true;
 
     for (const LeanStat& stat : stats)
     {
-        JsonObject obj = array.createNestedObject();
+        if (!first) server.sendContent(",");
+        first = false;
+
+        StaticJsonDocument<256> doc; // per-object pool
+        JsonObject obj = doc.to<JsonObject>();
         obj["capturedAt"] = stat.capturedAt;
         obj["leanAngle"] = stat.leanAngle;
+
+        String out;
+        serializeJson(doc, out);
+        server.sendContent(out);
     }
 
-    String payload;
-    serializeJson(doc, payload);
-    server.send(200, "application/json", payload);
+    server.sendContent("]");
+    server.sendContent("");
 }
 
 void RecordingController::registerRoutes()
@@ -59,7 +66,7 @@ void RecordingController::registerRoutes()
                 server.send(200, "text/plain", "Scheduler is already running");
                 return;
             }
-            if (!serveStaticFile("/views/StartRecording.html", "text/html")) {
+            if (!serveStaticFile("/StartRecording.html", "text/html")) {
                 // serveStaticFile already sent an error response
                 return;
             }
@@ -80,7 +87,8 @@ void RecordingController::registerRoutes()
         uint64_t clientEpochMS = strtoull(server.arg("epoch").c_str(), nullptr, 10);
 
         Serial.printf("Client epoch: %llu\n", clientEpochMS);
-
+        // Important, only works once, first client wins
+        dateTime.setCurrentDateTime(clientEpochMS);
         leanScheduler.startScheduler();
 
         server.send(200, "text/plain", "Ride started ");
@@ -117,7 +125,7 @@ void RecordingController::registerRoutes()
         {
             getLatestLeanStats(true);
         });
-}
+};
 // co pilot did this, too much error handling for poc, but its in now
 bool RecordingController::serveStaticFile(const String& path, const char* contentType)
 {
@@ -135,7 +143,7 @@ bool RecordingController::serveStaticFile(const String& path, const char* conten
     server.streamFile(f, contentType);
     f.close();
     return true;
-}
+};
 
 
 
