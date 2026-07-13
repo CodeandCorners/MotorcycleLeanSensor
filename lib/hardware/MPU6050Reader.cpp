@@ -10,15 +10,17 @@
     // Pull from one library, update another
     void MPU6050Reader::readAndUpdateFilter()
     {
-        sensors_event_t a, g, temp;
-        mpu.getEvent(&a, &g, &temp);
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
 
-    const float degToRad = 3.14159265359f / 180.0f;
-    float gx = g.gyro.x * degToRad;
-    float gy = g.gyro.y * degToRad;
-    float gz = g.gyro.z * degToRad;
-
-    filter.updateIMU(gx, gy, gz, a.acceleration.x, a.acceleration.y, a.acceleration.z);
+    filter.updateIMU(
+        g.gyro.x,
+        g.gyro.y,
+        g.gyro.z,
+        a.acceleration.x,
+        a.acceleration.y,
+        a.acceleration.z
+    );
 }
 
 float MPU6050Reader::getRoll()

@@ -63,9 +63,10 @@ void setup() {
 
   // MPU6050, 200Hz
   Wire.begin(21, 22);   // SDA, SCL
+  Serial.println("MPU6050 SDA set to 21, SCL to 22");
   mpu.begin();
   filter.begin(200);
-
+  Serial.println("MPU6050 set to 200HZ");
   // Start the HTTP server
   server.begin();
   Serial.println("HTTP server started");
