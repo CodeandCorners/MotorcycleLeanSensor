@@ -118,5 +118,5 @@ Example response:
 ## Recommended:
 POC, will fall over after a certain amount of time due to internal memory being used
 
-- Keep interval 200MS for scheudler
-- Run for < 10 mins
+- Keep interval 200MS for scheduler
+- Run for < 5 mins
