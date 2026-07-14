@@ -21,18 +21,25 @@
 - Add PlatformIO extension
 - Plugin ESP32
 - plugin MPU6050 sensor into ports
-  
+
 | ESP32  | MPU6050 |
 |--------|---------|
 | 3V3    | VCC     |
 | GND    | GND     |
 | GPIO21 | SDA     |
 | GPIO22 | SCL     |
+- Mount MPU
+Flat on the top of the fuel tank (PCB parallel to the ground when the bike is upright).
+The sensor's Z-axis pointing upward.
+The X-axis pointing toward the front wheel.
+The Y-axis pointing toward the left side of the bike (or right—either is fine as long as you're consistent).
 
 - Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
+
+
 - hit urls based on readme (start is a good start)
 
 ### GET /recording/scheduler/start
@@ -104,7 +111,7 @@ Example response:
 - POST route added with form to send Datetime.now() from client to setup datetime on ESP32 for the first time
 - Sheduler added
 - scheduler disabled by default see comments in main.cpp
-- Delay of scheduler set within main.cpp in loop method
+- Delay of scheduler set within main.cpp in loop method. `  unsigned long delayBetweenRunsMs = 10;`
 - Response of results streamed as standard Json hit limit quickly
 - Added "LittleFs" file system to store html file, needs to be uploaded seperately to esp32
 

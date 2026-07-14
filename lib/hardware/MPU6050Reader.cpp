@@ -1,41 +1,50 @@
 
 #include <Adafruit_MPU6050.h>
-#include <MadgwickAHRS.h>
-#include <time.h>
+#include <math.h>
+
 #include "../models/LeanStat.h"
 #include "../util/DateTime.h"
 
 #include "MPU6050Reader.h"
 
-    // Pull from one library, update another
-    void MPU6050Reader::readAndUpdateFilter()
-    {
+static float roll = 0.0f;
+static float pitch = 0.0f;
+
+void MPU6050Reader::readAndUpdateFilter()
+{
     sensors_event_t a, g, temp;
     mpu.getEvent(&a, &g, &temp);
 
-    filter.updateIMU(
-        g.gyro.x,
-        g.gyro.y,
-        g.gyro.z,
-        a.acceleration.x,
-        a.acceleration.y,
-        a.acceleration.z
-    );
+    // Accelerometer values (m/s²)
+    float ax = a.acceleration.x;
+    float ay = a.acceleration.y;
+    float az = a.acceleration.z;
+
+    // Calculate angles directly from gravity
+    roll  = atan2f(ay, az) * 180.0f / PI;
+    pitch = atan2f(-ax, sqrtf(ay * ay + az * az)) * 180.0f / PI;
+
+    Serial.print("Roll: ");
+    Serial.print(roll, 1);
+    Serial.print("°  Pitch: ");
+    Serial.print(pitch, 1);
+    Serial.println("°");
 }
 
 float MPU6050Reader::getRoll()
 {
-    return filter.getRoll();
+    return roll;
 }
 
 float MPU6050Reader::getPitch()
 {
-    return filter.getPitch();
+    return pitch;
 }
 
 float MPU6050Reader::getYaw()
 {
-    return filter.getYaw();
+    // Cannot determine yaw from an accelerometer alone.
+    return 0.0f;
 }
 
 LeanStat MPU6050Reader::getLeanStat()
