@@ -14,7 +14,6 @@
 - ESP32 with wifi and bluetooth
 - 6 axis sensor (MPU6050)
 
-
 ## How to use
 - clone repo
 - install VS code
@@ -33,7 +32,7 @@ Keyes MPU (red), wires to right, logo reads face up correctly to rider
 (x axis left/right)
 (y front of bike)
 
-- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
+- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also) `pio run -t uploadfs -t upload -e esp32dev`
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
@@ -114,7 +113,7 @@ Example response:
 - Added "LittleFs" file system to store html file, needs to be uploaded seperately to esp32
 
 ## Notes
-- platformio.ini declares dev board, might need to change if variation of ESP32
+- platformio.ini declares dev board and nuances based on board such as log flags, might need to change if variation of ESP32
 
 ## Recommended:
 POC, will fall over after a certain amount of time due to internal memory being used
