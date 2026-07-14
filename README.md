@@ -27,8 +27,9 @@
 | GND    | GND     |
 | GPIO21 | SDA     |
 | GPIO22 | SCL     |
-- Mount MPU (experiment)
-Keyes MPU (red), wires to right, logo reads face up correctly to rider
+- Mount MPU
+  
+Keyes MPU (red) used for example, wires to right, logo reads face up correctly to rider, mounted on tank parralel to floor
 (x axis left/right)
 (y front of bike)
 
