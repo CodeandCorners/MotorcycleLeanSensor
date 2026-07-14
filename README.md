@@ -28,17 +28,15 @@
 | GND    | GND     |
 | GPIO21 | SDA     |
 | GPIO22 | SCL     |
-- Mount MPU
-Flat on the top of the fuel tank (PCB parallel to the ground when the bike is upright).
-The sensor's Z-axis pointing upward.
-The X-axis pointing toward the front wheel.
-The Y-axis pointing toward the left side of the bike (or right—either is fine as long as you're consistent).
+- Mount MPU (experiment)
+Keyes MPU (red), wires to right, logo reads face up correctly to rider
+(x axis left/right)
+(y front of bike)
 
 - Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also)
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
-
 
 - hit urls based on readme (start is a good start)
 
@@ -117,3 +115,9 @@ Example response:
 
 ## Notes
 - platformio.ini declares dev board, might need to change if variation of ESP32
+
+## Recommended:
+POC, will fall over after a certain amount of time due to internal memory being used
+
+- Keep interval 200MS for scheudler
+- Run for < 10 mins

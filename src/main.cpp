@@ -74,7 +74,7 @@ void setup() {
 
 void loop() {
   // Adjust this value as needed
-  unsigned long delayBetweenRunsMs = 20;
+  unsigned long delayBetweenRunsMs = 200;
   leanScheduler.loop(delayBetweenRunsMs);
   server.handleClient();
 }

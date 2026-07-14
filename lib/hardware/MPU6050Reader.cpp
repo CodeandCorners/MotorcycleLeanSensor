@@ -24,11 +24,6 @@ void MPU6050Reader::readAndUpdateFilter()
     roll  = atan2f(ay, az) * 180.0f / PI;
     pitch = atan2f(-ax, sqrtf(ay * ay + az * az)) * 180.0f / PI;
 
-    Serial.print("Roll: ");
-    Serial.print(roll, 1);
-    Serial.print("°  Pitch: ");
-    Serial.print(pitch, 1);
-    Serial.println("°");
 }
 
 float MPU6050Reader::getRoll()
