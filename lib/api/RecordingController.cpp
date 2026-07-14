@@ -7,7 +7,6 @@
 #include "../util/DateTime.h"
 
    
-
 void RecordingController::getLatestLeanStats(bool testOnly)
 {
     std::vector<LeanStat> stats;
