@@ -32,7 +32,7 @@ Keyes MPU (red), wires to right, logo reads face up correctly to rider
 (x axis left/right)
 (y front of bike)
 
-- Use in built in tasks from PlatformIO to "Build" and "Upload and Monitor" (there are CLI commands for this also) `pio run -t uploadfs -t upload -e esp32dev`
+- Use in built in tasks from PlatformIO to (optional - to test compile changes)"Build" and "Upload and Monitor" And "Upload Filesystem Image" (there are CLI commands for this also) `pio run -t uploadfs -t upload -e esp32dev`
 - On Client (phone/laptop) connect to new WIFI network
 `MotorcycleLeanSensor`
 `lean12345`
